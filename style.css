@@ -4,28 +4,47 @@
   box-sizing: border-box;
 }
 
-html {
-  /*
-  height: -webkit-fill-available;
-  */
-}
 body {
   margin: 0;
   padding: 0;
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
+  min-height: 100vh; /* use 100vh for desktop, non-mobile */
+  min-height: -webkit-fill-available; /* place things properly on ios, 100vh does not work */
+
+  background-color: hsl(197, 50%, 90%); /* pale blue background */
   font-family: sans-serif;
-  font-size: 1rem;
-  background-color: hsl(197, 50%, 90%);
+  font-size: 1rem; /* minimum acceptable font size for mobile */
 }
 
 main {
-  position: relative;
 }
 .outer-container {
   /* unused in mobile */
 }
+.step-section {
+  /* position at top fixed and unscrollable */
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: -2;
+}
+.inner-container {
+  position: relative;
+  top: 6rem;
+  display: grid;
+  gap: 1.5rem;
 
+  margin-inline: 2rem;
+  margin-bottom: 400px;
+  padding: 1rem;
+  border-radius: 0.5rem;
+
+  background-color: hsl(0, 0%, 100%);
+}
+.content-section {
+  display: grid;
+  gap: 1rem;
+}
 .button-section {
   position: fixed;
   display: flex;
@@ -40,6 +59,7 @@ main {
   padding-block: 1rem;
   background-color: hsl(0, 0%, 100%);
 }
+
 .btn {
   padding: 1rem 1.5rem;
   text-transform: uppercase;
@@ -62,38 +82,35 @@ main {
   color: hsl(243, 5%, 90%);
 }
 
-.step-section {
-  /* position at top fixed and unscrollable */
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  z-index: -2;
-}
 .step-section__list {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: center;
+  gap: 1rem;
+
+  height: 172px;
   margin: 0;
+  padding-top: 1rem;
+
   color: hsl(0, 0%, 100%);
   list-style: none;
   counter-reset: step-number;
-  display: grid;
-  grid-auto-flow: column;
-  gap: 1rem;
-  justify-content: center;
-  padding-top: 1rem;
-  height: 172px;
+
   background-image: url("assets/bg-sidebar-mobile.svg");
   background-position: top;
   background-size: cover;
   background-repeat: no-repeat;
 }
 .step-section__step {
-  counter-increment: step-number;
+  display: grid;
+  place-items: center;
+
   width: 1.5rem;
   height: 1.5rem;
   border: 1px solid hsl(0, 0%, 100%);
   border-radius: 50%;
-  display: grid;
-  place-items: center;
+
+  counter-increment: step-number;
 }
 .step-section__step::before {
   content: counter(step-number);
@@ -101,24 +118,6 @@ main {
 .step-section__step--selected {
   color: black;
   background-color: hsl(0, 0%, 100%);
-}
-.content-section {
-  position: relative;
-  top: 6rem;
-  background-color: hsl(0, 0%, 100%);
-  margin-inline: 2rem;
-  /*
-  margin-top: 6rem;
-  */
-  margin-bottom: 400px;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  display: grid;
-  gap: 1.5rem;
-}
-.content-subsection {
-  display: grid;
-  gap: 1rem;
 }
 p {
   margin: 0;
@@ -133,52 +132,58 @@ input {
   main {
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
+
     width: 100%;
+    transform: translateY(-50%);
   }
   .outer-container {
     position: relative;
-    max-width: 940px;
-    margin-inline: auto;
     display: grid;
     grid-auto-flow: column;
     grid-template-columns: auto 1fr;
-    background-color: hsl(0, 0%, 100%);
+
+    max-width: 940px;
+    margin-inline: auto;
     border-radius: 1rem;
+
+    background-color: hsl(0, 0%, 100%);
   }
   .step-section {
     position: relative;
     z-index: 0;
   }
+  .inner-container {
+    /* space content-section and button-section at top/bottom with space between */
+    top: 0; /* on mobile this is set down 6rem */
+    display: grid;
+    align-content: space-between;
+    grid-template-rows: repeat(auto-fill, auto) 1fr;
+    gap: 0;
+
+    margin-block: 1rem;
+    padding: 0;
+    padding-top: 2rem;
+  }
+  .content-section {
+    overflow-y: auto;
+  }
+  .inner-container p {
+    max-height: 100px;
+  }
+  .button-section {
+    position: relative; /* on mobile this is fixed */
+    padding: 0;
+  }
+
   .step-section__list {
     width: 274px;
     height: 568px;
     margin-block: 1rem;
     margin-left: 1rem;
+
     background-image: url("assets/bg-sidebar-desktop.svg");
     background-position: top;
     background-size: cover;
     background-repeat: no-repeat;
-  }
-  .content-section {
-    position: relative;
-    align-content: space-between;
-    top: 0;
-    display: grid;
-    gap: 0;
-    grid-template-rows: repeat(auto-fill, auto) 1fr;
-    margin-block: 1rem;
-    padding: 0;
-    padding-top: 2rem;
-  }
-  .content-subsection {
-    overflow-y: auto;
-  }
-  .content-section p {
-    max-height: 100px;
-  }
-  .button-section {
-    position: relative;
-    padding: 0;
   }
 }
